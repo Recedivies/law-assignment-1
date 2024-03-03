@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "commons",
     "identities",
+    "services",
 ]
 
 AUTH_USER_MODEL = "identities.User"

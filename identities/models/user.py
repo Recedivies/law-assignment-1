@@ -26,7 +26,6 @@ class UserManager(BaseUserManager):
             return user
 
         except IntegrityError as e:
-            print("WOYYY???", e)
             raise BadRequestException(e)
 
     def create_superuser(self, email, full_name="", password=None):
