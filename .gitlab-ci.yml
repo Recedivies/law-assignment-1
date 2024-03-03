@@ -1,0 +1,66 @@
+stages:
+  - test
+  - publish
+  - deploy
+
+Test Coverage:
+  stage: test
+  image: python:3.12-alpine
+  services:
+    - "postgres:12.1"
+  variables:
+    DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/postgres"
+    DJANGO_SETTINGS_MODULE: "api.settings.gitlab-ci"
+    SECRET_KEY: "secret"
+    STACK_NAME: "placeholder"
+    DEBUG: "True"
+  before_script:
+    - pip install -r requirements.txt
+    - python manage.py makemigrations
+    - python manage.py migrate
+  script:
+    - coverage run manage.py test
+    - coverage report -m
+    - coverage xml -i
+  after_script:
+    - echo "Coverage tests complete"
+  coverage: "/TOTAL.+ ([0-9]{1,3}%)/"
+  artifacts:
+    expire_in: 1 hour
+    paths:
+      - $CI_PROJECT_DIR/coverage.xml
+  allow_failure: true
+
+Publish Docker Build:
+  stage: publish
+  image: docker:20.10.16
+  services:
+    - name: docker:20.10.16-dind
+      alias: docker
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_CERT_PATH: "/certs/client"
+  before_script:
+    - echo $DOCKER_PASSWORD | docker login -u $REGISTRY_USER --password-stdin docker.io
+  script:
+    - ls
+    - docker build --build-arg SECRET_KEY=$SECRET_KEY --build-arg ENVIRONMENT=$ENVIRONMENT --build-arg DATABASE_PROD_NAME=$DATABASE_PROD_NAME --build-arg DATABASE_PROD_PASSWORD=$DATABASE_PROD_PASSWORD --build-arg DATABASE_PROD_HOST=$DATABASE_PROD_HOST --build-arg DATABASE_PROD_USERNAME=$DATABASE_PROD_USERNAME -t $REGISTRY_USER/$IMAGE_NAME_PROD:latest .
+    - docker push $REGISTRY_USER/$IMAGE_NAME_PROD:latest
+  only:
+    - main
+
+Deploy Prod:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY_PROD
+    - apk update && apk add openssh-client
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY_PROD $GCP_USERNAME_PROD@$GCP_STATIC_IP_PROD "
+      docker container rm -f $CONTAINER_NAME_PROD || true &&
+      docker image rm -f $REGISTRY_USER/$IMAGE_NAME_PROD:latest|| true &&
+      docker run --name $CONTAINER_NAME_PROD -d -p 80:8000 $REGISTRY_USER/$IMAGE_NAME_PROD:latest"
+  only:
+    - main

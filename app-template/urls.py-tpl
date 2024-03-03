@@ -1,0 +1,7 @@
+from django.urls import path # noqa
+
+{{ app_name }}_urls = [
+]
+
+urlpatterns = []
+urlpatterns += {{ app_name }}_urls

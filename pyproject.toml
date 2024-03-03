@@ -1,0 +1,8 @@
+[tool.black]
+extend-exclude = '''
+/(
+  # The following are specific to Black, you probably don't want those.
+  migrations | venv | env
+)/
+'''
+line-length = 120
