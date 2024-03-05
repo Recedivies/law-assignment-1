@@ -7,7 +7,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from services.serializers import ServiceResponseSerializer, UpdateServiceRequest, UpdateServiceResponseSerializer
+from services.serializers import (
+    ServiceResponseSerializer,
+    UpdateServiceRequestSerializer,
+    UpdateServiceResponseSerializer,
+)
 from services.services.delete_service import DeleteServiceDataService
 from services.services.get_service import GetServiceDataService
 from services.services.update_service import UpdateServiceDataService
@@ -25,7 +29,7 @@ class DetailServiceInstanceAPI(APIView):
         return Response(ServiceResponseSerializer(service).data)
 
     def put(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        serializer = UpdateServiceRequest(data=request.data)
+        serializer = UpdateServiceRequestSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         service_id = self.kwargs.get("service_id")

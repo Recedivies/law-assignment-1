@@ -49,6 +49,8 @@ class UpdateServiceDataService(Runnable):
         service.enabled = enabled
         service.timeout = timeout
 
+        service.save()
+
         return UpdateServiceData(
             id=service.id,
             name=service.name,

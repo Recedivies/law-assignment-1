@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "commons",
     "identities",
+    "plugins",
+    "routes",
     "services",
 ]
 

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from commons.serializers import ReadOnlySerializer
 
 
-class ServiceRequest(ReadOnlySerializer):
+class ServiceRequestSerializer(ReadOnlySerializer):
     name = serializers.CharField(required=True)
     host = serializers.CharField(required=True)
     port = serializers.IntegerField(required=False)
@@ -24,7 +24,7 @@ class ListServiceResponseSerializer(ReadOnlySerializer):
     services = serializers.ListField(child=ServiceResponseSerializer())
 
 
-class UpdateServiceRequest(ReadOnlySerializer):
+class UpdateServiceRequestSerializer(ReadOnlySerializer):
     name = serializers.CharField(required=True)
     host = serializers.CharField(required=True)
     port = serializers.IntegerField(required=True)
