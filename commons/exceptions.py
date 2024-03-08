@@ -45,16 +45,24 @@ class BadRequestException(ExtendedAPIException):
     status_code = status.HTTP_400_BAD_REQUEST
 
 
-class NotFoundRequestException(ExtendedAPIException):
-    status_code = status.HTTP_404_NOT_FOUND
-
-
 class ForbiddenRequestException(ExtendedAPIException):
     status_code = status.HTTP_403_FORBIDDEN
 
 
+class NotFoundRequestException(ExtendedAPIException):
+    status_code = status.HTTP_404_NOT_FOUND
+
+
+class TimeoutRequestException(ExtendedAPIException):
+    status_code = status.HTTP_408_REQUEST_TIMEOUT
+
+
 class UnprocessableEntityException(ExtendedAPIException):
     status_code = status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+class RateLimitedException(ExtendedAPIException):
+    status_code = status.HTTP_429_TOO_MANY_REQUESTS
 
 
 class InternalServerException(ExtendedAPIException):

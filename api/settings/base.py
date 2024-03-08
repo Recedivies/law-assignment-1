@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import logging
 import os
 from pathlib import Path
 
@@ -50,8 +51,10 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "commons",
+    "config",
     "identities",
     "plugins",
+    "request",
     "routes",
     "services",
 ]
@@ -161,3 +164,32 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "PATCH"]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} (module: {module}; func_name: {funcName}; {message})",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {"level": "DEBUG", "class": "logging.StreamHandler", "formatter": "verbose"},
+    },
+    "loggers": {
+        "api": {"handlers": ["console"], "level": "INFO", "propagate": False},
+    },
+}
+
+LOGGER_INSTANCE = logging.getLogger("api")

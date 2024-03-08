@@ -43,7 +43,7 @@ class UpdateRouteService(Runnable):
         except Service.DoesNotExist:
             raise NotFoundRequestException(SERVICE_NOT_FOUND)
 
-        if Route.objects.filter(name=name, user=user).exists():
+        if Route.objects.filter(name=name, user=user).exclude(id=route.id).exists():
             raise UnprocessableEntityException(DUPLICATED_NAME)
 
         route.name = name

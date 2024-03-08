@@ -1,1 +1,1 @@
-# from .routes import ServiceAdmin  # noqa
+from .routes import RouteAdmin  # noqa

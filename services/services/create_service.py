@@ -26,7 +26,7 @@ class CreateServiceDataService(Runnable):
         user: User,
         name: str,
         host: str,
-        port: Optional[int] = 80,
+        port: Optional[int] = 443,
         path: Optional[str] = "/",
         enabled: Optional[bool] = True,
         timeout: Optional[int] = 6000,

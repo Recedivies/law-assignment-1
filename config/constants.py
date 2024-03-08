@@ -1,0 +1,2 @@
+TIMEOUT_REQUEST = "READ TIME OUT"
+RATE_LIMIT_EXCEEDED = "API rate limit exceeded"

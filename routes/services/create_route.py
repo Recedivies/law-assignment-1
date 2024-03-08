@@ -2,10 +2,10 @@ import uuid
 from typing import List
 
 from commons.dataclasses import BaseDataClass
-from commons.exceptions import BadRequestException, NotFoundRequestException, UnprocessableEntityException
+from commons.exceptions import NotFoundRequestException, UnprocessableEntityException
 from commons.patterns.runnable import Runnable
 from identities.models import User
-from routes.constants import DUPLICATED_NAME, ROUTE_NOT_FOUND
+from routes.constants import DUPLICATED_NAME
 from routes.models import Route
 from services.constants import SERVICE_NOT_FOUND
 from services.models import Service
@@ -28,10 +28,7 @@ class CreateRouteService(Runnable):
         try:
             service = Service.objects.get(id=service_id)
         except Service.DoesNotExist:
-            raise NotFoundRequestException(ROUTE_NOT_FOUND)
-
-        if not service:
-            raise BadRequestException(SERVICE_NOT_FOUND)
+            raise NotFoundRequestException(SERVICE_NOT_FOUND)
 
         if Route.objects.filter(name=name, user=user).exists():
             raise UnprocessableEntityException(DUPLICATED_NAME)

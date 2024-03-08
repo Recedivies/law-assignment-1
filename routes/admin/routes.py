@@ -1,14 +1,14 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# from routes.models import Route
+from routes.models import Route
 
 
-# @admin.register(Route)
-# class RouteAdmin(admin.ModelAdmin):
-#     """Admin View for Route"""
+@admin.register(Route)
+class RouteAdmin(admin.ModelAdmin):
+    """Admin View for Route"""
 
-#     list_display = ("name", "host", "port", "path", "enabled")
+    list_display = ("name", "methods", "hosts", "paths")
 
-#     search_fields = ["name", "host"]
-#     ordering = ["-created_at"]
-#     sortable_by = ["created_at"]
+    search_fields = ["name", "methods"]
+    ordering = ["-created_at"]
+    sortable_by = ["created_at"]

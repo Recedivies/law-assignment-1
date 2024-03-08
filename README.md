@@ -9,27 +9,8 @@
 ### Requirements
 
 - pip >= v23.3
-- pipenv >= v2023.9.1
 
 ### Steps
-
-- Install [pipenv](https://github.com/pypa/pipenv)
-
-```shell
-python3 -m pip install pipenv
-```
-
-- Create a virtual env and install all dependencies (including dev)
-
-```shell
-pipenv install --dev
-```
-
-- Activate the virtual env
-
-```shell
-pipenv shell
-```
 
 - Install [pre-commit](https://pre-commit.com/) hook (for linting) using this command after installing the requirements
   in virtual env

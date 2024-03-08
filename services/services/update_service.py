@@ -39,7 +39,7 @@ class UpdateServiceDataService(Runnable):
         except Service.DoesNotExist:
             raise NotFoundRequestException(SERVICE_NOT_FOUND)
 
-        if Service.objects.filter(name=name, user=user).exists():
+        if Service.objects.filter(name=name, user=user).exclude(id=service.id, name=name).exists():
             raise UnprocessableEntityException(DUPLICATED_NAME)
 
         service.name = name

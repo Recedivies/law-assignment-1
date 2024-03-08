@@ -10,6 +10,13 @@ class RouteRequestSerializer(ReadOnlySerializer):
     paths = serializers.ListSerializer(child=serializers.CharField(required=True))
     service_id = serializers.UUIDField(required=True)
 
+    def validate_methods(self, value):
+        valid_methods = ["GET", "POST", "PUT", "DELETE"]
+        for val in value:
+            if val not in valid_methods:
+                raise serializers.ValidationError("Invalid methods name. Must be one of: GET, POST, PUT, DELETE")
+        return value
+
 
 class RouteResponseSerializer(ReadOnlySerializer):
     route_id = serializers.UUIDField(source="id")
