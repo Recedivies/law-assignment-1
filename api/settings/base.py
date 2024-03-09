@@ -30,10 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "local")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if ENVIRONMENT == "local":
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -195,4 +192,4 @@ LOGGING = {
 LOGGER_INSTANCE = logging.getLogger("api")
 
 # type of static files storage
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"

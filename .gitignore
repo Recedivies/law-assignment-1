@@ -138,6 +138,7 @@ dmypy.json
 !.elasticbeanstalk/*.global.yml
 
 # Static Files
+static
 staticfiles
 migration_data
 
