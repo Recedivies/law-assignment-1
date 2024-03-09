@@ -56,6 +56,7 @@ class RequestHandlerService(Runnable):
         caching_key = None
         rate_limiting_key = None
         cached_data = None
+        request_body = None
 
         for plugin in plugins:
             if plugin.name == "caching":
@@ -65,6 +66,7 @@ class RequestHandlerService(Runnable):
 
             if plugin.name == "request-validator":
                 RequestBodyValidatorService.run(config=plugin.config, **kwargs)
+                request_body = kwargs.get("request_body", None)
 
             if plugin.name == "rate-limiting":
                 limit_by = plugin.config.get("limit_by ", "ip")
@@ -82,7 +84,7 @@ class RequestHandlerService(Runnable):
         if cached_data:
             return cached_data
 
-        response_data = cls._make_request(method=method, URL=URL, timeout=service.timeout)
+        response_data = cls._make_request(method=method, URL=URL, timeout=service.timeout, request_body=request_body)
         if caching_key:
             CacheService.set_cache(key=caching_key, value=response_data, config=config_caching)
 
@@ -94,6 +96,7 @@ class RequestHandlerService(Runnable):
         method: str,
         URL: str,
         timeout: int,  # 1000 = 1s
+        request_body: Any = None,
     ):
         methods = {
             "GET": requests.get,
@@ -103,7 +106,7 @@ class RequestHandlerService(Runnable):
         }
         if method in methods:
             try:
-                response = methods[method](URL, timeout=timeout / 1000)
+                response = methods[method](URL, json=request_body, timeout=timeout / 1000)
                 return response.json()
             except requests.exceptions.Timeout:
                 raise TimeoutRequestException(TIMEOUT_REQUEST)

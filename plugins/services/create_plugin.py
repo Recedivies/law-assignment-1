@@ -83,10 +83,10 @@ class CreatePluginService(Runnable):
     def _validate_request_validator(cls, config: CONFIG_TYPE):
         body_schema = config.get("body_schema", None)
         for item in body_schema:
-            for key, _ in item.items():
-                if "type" not in key:
+            for _, val in item.items():
+                if "type" not in val:
                     raise BadRequestException(INVALID_TYPE_BODY_SCHEMA)
-                if "required" not in key:
+                if "required" not in val:
                     raise BadRequestException(INVALID_REQUIRED_BODY_SCHEMA)
 
     @classmethod
