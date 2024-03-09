@@ -193,3 +193,6 @@ LOGGING = {
 }
 
 LOGGER_INSTANCE = logging.getLogger("api")
+
+# type of static files storage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
